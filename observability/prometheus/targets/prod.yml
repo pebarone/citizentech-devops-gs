@@ -1,4 +1,4 @@
 # Troque pelo FQDN impresso em "terraform output mvp_url" (sem https://).
-- targets: ["citizentech-xxxxxx.brazilsouth.cloudapp.azure.com"]
+- targets: ["citizentech-afvgwa.chilecentral.cloudapp.azure.com"]
   labels:
     env: production

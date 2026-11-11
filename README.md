@@ -6,7 +6,7 @@
 O MVP da equipe vai para o ar sem clique em botão: container, nuvem descrita em Terraform e um
 pipeline que barra segredo vazado e vulnerabilidade antes de qualquer coisa chegar ao cidadão.
 
-**URL do MVP:** `https://<preencher após o terraform apply>`
+**URL do MVP:** https://citizentech-afvgwa.chilecentral.cloudapp.azure.com
 
 ## Integrantes
 
@@ -22,10 +22,10 @@ pipeline que barra segredo vazado e vulnerabilidade antes de qualquer coisa cheg
 | Cidadão e território | _preencher_ |
 | Problema, em uma frase | _preencher_ |
 | Proposta de valor | _preencher_ |
-| Arquitetura: componentes | API FastAPI em container → Caddy (HTTPS) → VM Azure (Brazil South) criada por Terraform; CI/CD DevSecOps no GitHub Actions; observabilidade Prometheus + Grafana. Ver [docs/arquitetura.md](docs/arquitetura.md). _Completar com os componentes das outras disciplinas._ |
+| Arquitetura: componentes | API FastAPI em container → Caddy (HTTPS) → VM Azure (Chile Central, cota gratuita) criada por Terraform; CI/CD DevSecOps no GitHub Actions; observabilidade Prometheus + Grafana. Ver [docs/arquitetura.md](docs/arquitetura.md). _Completar com os componentes das outras disciplinas._ |
 | Fontes de dados | _preencher (componente Dados)_ |
 | Modelos de IA utilizados | _preencher (componentes Inteligência e Visão)_ |
-| URL do MVP e repositório | _preencher_ |
+| URL do MVP e repositório | https://citizentech-afvgwa.chilecentral.cloudapp.azure.com · https://github.com/pebarone/citizentech-devops-gs |
 | Indicadores de impacto | _preencher_ |
 | ODS conectados | _preencher (obrigatório)_ |
 

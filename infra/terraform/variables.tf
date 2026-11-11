@@ -10,15 +10,21 @@ variable "project" {
 }
 
 variable "location" {
-  description = "Região Azure. Brazil South mantém os dados no Brasil (LGPD)."
+  description = "Região Azure. Chile Central: a mais próxima do Brasil entre as permitidas pela Azure for Students que oferecem VM da cota gratuita (ver docs/custo.md)."
   type        = string
-  default     = "brazilsouth"
+  default     = "chilecentral"
 }
 
 variable "vm_size" {
-  description = "Tamanho da VM. B1s/B2s cabem no crédito do Azure for Students."
+  description = "Tamanho da VM. B2ats_v2 (2 vCPU, 1 GiB) está na cota gratuita de 750 h/mês da conta de estudante."
   type        = string
-  default     = "Standard_B1s"
+  default     = "Standard_B2ats_v2"
+}
+
+variable "budget_amount" {
+  description = "Orçamento mensal em US$ com alerta aos Owners da assinatura (80% real e 100% previsto). 0 desliga."
+  type        = number
+  default     = 5
 }
 
 variable "admin_username" {

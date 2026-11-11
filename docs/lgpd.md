@@ -17,7 +17,12 @@
 
 ## Localização e transferência
 
-- Toda a infraestrutura fica em **Brazil South (São Paulo)**. Não há transferência internacional de dados do cidadão.
+- A infraestrutura fica em **Chile Central (Santiago)**, porque a conta de estudante não oferece VM gratuita em
+  Brazil South (ver [custo.md](custo.md)). Hoje o único dado pessoal tratado é o IP do visitante, nos logs rotativos.
+- Isso é transferência internacional (LGPD, art. 33). Ela se apoia nas cláusulas contratuais da Microsoft para
+  serviços de nuvem e na criptografia em repouso e em trânsito.
+- **Em produção real com dados do cidadão**, a recomendação é mudar `location` para `brazilsouth` numa assinatura
+  paga. O Terraform não muda além dessa variável.
 - O GitHub (EUA) guarda só código e imagens de container, sem dados pessoais.
 
 ## Princípios aplicados

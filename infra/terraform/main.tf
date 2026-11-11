@@ -139,10 +139,11 @@ resource "azurerm_linux_virtual_machine" "app" {
     public_key = var.admin_ssh_public_key
   }
 
+  # Premium SSD de 64 GiB = P6, o disco incluído na cota gratuita (um HDD Standard seria cobrado).
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-    disk_size_gb         = 30
+    storage_account_type = "Premium_LRS"
+    disk_size_gb         = 64
   }
 
   source_image_reference {
@@ -167,5 +168,41 @@ resource "azurerm_linux_virtual_machine" "app" {
     # Mudar custom_data RECRIA a VM. Depois do primeiro apply, ajustes no .env são feitos
     # na própria VM (ver docs/evidencias.md), não por aqui.
     ignore_changes = [custom_data]
+  }
+}
+
+# ---- Orçamento -----------------------------------------------------------------
+
+# Alerta por e-mail aos Owners da assinatura antes de o crédito ser consumido além do previsto.
+resource "azurerm_consumption_budget_subscription" "monthly" {
+  count           = var.budget_amount > 0 ? 1 : 0
+  name            = "budget-${local.name}"
+  subscription_id = "/subscriptions/${var.subscription_id}"
+  amount          = var.budget_amount
+  time_grain      = "Monthly"
+
+  time_period {
+    start_date = formatdate("YYYY-MM-01'T'00:00:00Z", timestamp())
+  }
+
+  notification {
+    enabled        = true
+    operator       = "GreaterThanOrEqualTo"
+    threshold      = 80
+    threshold_type = "Actual"
+    contact_roles  = ["Owner"]
+  }
+
+  notification {
+    enabled        = true
+    operator       = "GreaterThanOrEqualTo"
+    threshold      = 100
+    threshold_type = "Forecasted"
+    contact_roles  = ["Owner"]
+  }
+
+  lifecycle {
+    # A data de início só vale na criação; timestamp() mudaria a cada plan.
+    ignore_changes = [time_period]
   }
 }

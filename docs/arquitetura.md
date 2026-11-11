@@ -16,7 +16,7 @@ flowchart LR
 
     push -.imagem.-> ghcr[(GHCR)]
 
-    subgraph az[Azure · Brazil South · criado por Terraform]
+    subgraph az[Azure · Chile Central · criado por Terraform]
         direction TB
         nsg{{NSG<br/>80/443 público<br/>22 só admin_cidrs}}
         subgraph vm[VM Ubuntu · docker compose]
@@ -47,7 +47,7 @@ flowchart LR
 | Deploy por `az vm run-command` | O runner do GitHub não precisa de SSH. A porta 22 fica fechada ou restrita ao IP da equipe. |
 | Login OIDC (identidade federada) | Não há senha ou client secret de longa duração no GitHub. O token só vale para o environment `production` deste repositório. |
 | State em Storage Account com auth Entra ID | O state fica fora do repo, com versionamento e sem chave compartilhada. |
-| Brazil South | Dados no Brasil, o que favorece a LGPD, e menor latência para o cidadão. |
+| Chile Central, B2ats_v2 e disco P6 | Cabem na cota gratuita da Azure for Students, que não oferece VM gratuita em Brazil South. Chile Central é a região permitida mais próxima. Com dados reais do cidadão, a troca para `brazilsouth` é uma variável (ver [lgpd.md](lgpd.md) e [custo.md](custo.md)). |
 | Prometheus e Grafana locais | O enunciado permite. Evita custo de VM extra e não expõe o Grafana na internet. |
 
 ## Fluxo do pipeline

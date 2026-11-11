@@ -3,11 +3,18 @@
 # Pré-requisito: az login
 # Uso: ./create-tfstate-storage.sh [regiao]
 set -euo pipefail
+# No Git Bash (Windows), impede que "/subscriptions/..." vire um caminho de arquivo.
+export MSYS_NO_PATHCONV=1
 
-LOCATION="${1:-brazilsouth}"
+LOCATION="${1:-chilecentral}"
 RG="rg-citizentech-tfstate"
 SA="sttfstate$(openssl rand -hex 3)"
 CONTAINER="tfstate"
+
+# Assinaturas novas (ex.: Azure for Students) vêm sem esses provedores registrados.
+for ns in Microsoft.Storage Microsoft.Compute Microsoft.Network Microsoft.ManagedIdentity Microsoft.Consumption; do
+  az provider register --namespace "$ns" --wait --output none
+done
 
 az group create --name "$RG" --location "$LOCATION" --output none
 
