@@ -66,6 +66,17 @@ variable "github_repository" {
   }
 }
 
+variable "github_oidc_subject_prefix" {
+  description = <<-EOT
+    Prefixo do subject do token OIDC do GitHub. Repositórios novos emitem o formato com IDs imutáveis,
+    ex.: "repo:owner@123/nome@456". Obtenha com:
+      gh api repos/<owner>/<nome>/actions/oidc/customization/sub --jq .sub_claim_prefix
+    null = formato clássico "repo:<github_repository>".
+  EOT
+  type        = string
+  default     = null
+}
+
 variable "github_environment" {
   description = "Environment do GitHub Actions que pode fazer deploy (o subject do token OIDC)."
   type        = string

@@ -15,7 +15,8 @@ resource "azurerm_federated_identity_credential" "github_deploy" {
   parent_id           = azurerm_user_assigned_identity.github_deploy.id
   audience            = ["api://AzureADTokenExchange"]
   issuer              = "https://token.actions.githubusercontent.com"
-  subject             = "repo:${var.github_repository}:environment:${var.github_environment}"
+  # Repositórios novos usam o formato com IDs imutáveis (repo:owner@id/nome@id). Ver variables.tf.
+  subject = "${coalesce(var.github_oidc_subject_prefix, "repo:${var.github_repository}")}:environment:${var.github_environment}"
 }
 
 resource "azurerm_role_assignment" "github_deploy_vm" {

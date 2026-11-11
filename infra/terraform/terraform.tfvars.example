@@ -3,6 +3,9 @@
 
 subscription_id      = "00000000-0000-0000-0000-000000000000"
 github_repository    = "sua-org/citizentech"
+# Repositórios novos emitem o subject OIDC com IDs imutáveis. Copie a saída de:
+#   gh api repos/sua-org/citizentech/actions/oidc/customization/sub --jq .sub_claim_prefix
+github_oidc_subject_prefix = "repo:sua-org@123/citizentech@456"
 admin_ssh_public_key = "ssh-ed25519 AAAA... voce@maquina"
 
 # Seu IP público com /32 (curl -s https://ifconfig.me). Deixe [] para não abrir SSH.
@@ -11,4 +14,5 @@ admin_cidrs = []
 # Gere com: openssl rand -hex 32
 metrics_token = "COLE_AQUI_O_TOKEN_GERADO"
 
-# vm_size = "Standard_B2s"
+# vm_size = "Standard_B2ats_v2"  # padrão: cota gratuita
+# budget_amount = 5            # alerta de orçamento em US$

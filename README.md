@@ -98,6 +98,10 @@ cp infra/terraform/terraform.tfvars.example infra/terraform/terraform.tfvars
 Preencha `subscription_id`, `github_repository`, `admin_ssh_public_key` e `metrics_token`
 (`openssl rand -hex 32`). O arquivo é ignorado pelo git.
 
+Repositórios novos do GitHub emitem o token OIDC com IDs imutáveis. Preencha também `github_oidc_subject_prefix`
+com a saída de `gh api repos/<owner>/<repo>/actions/oidc/customization/sub --jq .sub_claim_prefix`. Sem isso, o
+login na Azure falha com `AADSTS700213`.
+
 **3. Infraestrutura**
 
 ```bash
