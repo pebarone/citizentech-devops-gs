@@ -1,0 +1,40 @@
+# Stack local: a mesma topologia de produção (Caddy na frente da API).
+#   docker compose up -d --build
+#   http://localhost:8080
+# Em produção a VM usa deploy/docker-compose.prod.yml, com a imagem publicada no GHCR.
+
+name: citizentech
+
+services:
+  api:
+    build:
+      context: ./app
+    image: citizentech-api:local
+    environment:
+      APP_ENV: local
+      APP_VERSION: local
+      METRICS_TOKEN: ${METRICS_TOKEN:-}
+      ENABLE_CHAOS: ${ENABLE_CHAOS:-true}
+    # Porta exposta só no loopback, para o Prometheus local raspar /metrics.
+    ports:
+      - "127.0.0.1:8000:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  proxy:
+    image: caddy:2.8.4-alpine
+    environment:
+      SITE_ADDRESS: ":80"
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped

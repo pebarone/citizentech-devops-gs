@@ -1,0 +1,9 @@
+# Copie para backend.hcl (ignorado pelo git) com os valores impressos por
+# infra/bootstrap/create-tfstate-storage.sh e rode:
+#   terraform init -backend-config=backend.hcl
+
+resource_group_name  = "rg-citizentech-tfstate"
+storage_account_name = "sttfstateXXXXXX"
+container_name       = "tfstate"
+key                  = "citizentech/prod.tfstate"
+use_azuread_auth     = true

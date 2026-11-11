@@ -1,0 +1,22 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+packages:
+  - ca-certificates
+  - curl
+  - unattended-upgrades
+
+write_files:
+  - path: /opt/citizentech/.env
+    permissions: "0600"
+    owner: root:root
+    content: |
+      SITE_ADDRESS=${site_address}
+      METRICS_TOKEN=${metrics_token}
+      ENABLE_CHAOS=${enable_chaos}
+
+runcmd:
+  - curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
+  - sh /tmp/get-docker.sh
+  - systemctl enable --now docker
+  - rm -f /tmp/get-docker.sh

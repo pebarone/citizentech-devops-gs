@@ -1,0 +1,51 @@
+# Stack de produção na VM. Não editar segredos aqui: eles vêm do /opt/citizentech/.env,
+# gerado pelo cloud-init a partir das variáveis do Terraform.
+# O pipeline (deploy.sh) baixa este arquivo na versão do commit, grava API_IMAGE e APP_VERSION
+# no .env e roda: docker compose -f docker-compose.prod.yml up -d
+
+name: citizentech
+
+services:
+  api:
+    image: ${API_IMAGE:?defina API_IMAGE}
+    env_file: .env
+    environment:
+      APP_ENV: production
+      APP_VERSION: ${APP_VERSION:-unknown}
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 384m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+    restart: unless-stopped
+
+  proxy:
+    image: caddy:2.8.4-alpine
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:?defina SITE_ADDRESS}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      api:
+        condition: service_healthy
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:

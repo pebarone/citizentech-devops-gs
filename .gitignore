@@ -1,0 +1,41 @@
+# ---- Segredos e configuração local ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+observability/secrets/*
+!observability/secrets/.gitkeep
+
+# ---- Terraform: state e variáveis NUNCA no repositório ----
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+crash.log
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+backend.hcl
+.terraform.lock.hcl.bak
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ---- Editor / SO ----
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ---- Material da disciplina (não redistribuir) ----
+Desafio-FIAP-GS-*.pdf

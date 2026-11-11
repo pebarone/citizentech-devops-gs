@@ -1,0 +1,4 @@
+# Scripts executados no Linux (VM e runners) precisam de LF, mesmo editados no Windows.
+* text=auto eol=lf
+*.pdf binary
+*.png binary

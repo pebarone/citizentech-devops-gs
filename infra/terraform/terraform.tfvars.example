@@ -1,0 +1,14 @@
+# Copie para terraform.tfvars (ignorado pelo git) e preencha.
+#   cp terraform.tfvars.example terraform.tfvars
+
+subscription_id      = "00000000-0000-0000-0000-000000000000"
+github_repository    = "sua-org/citizentech"
+admin_ssh_public_key = "ssh-ed25519 AAAA... voce@maquina"
+
+# Seu IP público com /32 (curl -s https://ifconfig.me). Deixe [] para não abrir SSH.
+admin_cidrs = []
+
+# Gere com: openssl rand -hex 32
+metrics_token = "COLE_AQUI_O_TOKEN_GERADO"
+
+# vm_size = "Standard_B2s"

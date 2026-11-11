@@ -1,0 +1,46 @@
+groups:
+  - name: citizentech-golden-signals
+    rules:
+      # Disponibilidade: o Prometheus não consegue raspar o MVP.
+      - alert: MVPForaDoAr
+        # Só produção: o job local fica "down" sempre que a stack local não está rodando.
+        expr: up{job="citizentech-prod"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "MVP fora do ar ({{ $labels.env }})"
+          description: "O alvo {{ $labels.instance }} não responde há mais de 1 minuto."
+
+      # Erros: mais de 5% das requisições com 5xx.
+      - alert: TaxaDeErroAlta
+        expr: |
+          sum by (env) (rate(http_requests_total{status=~"5.."}[5m]))
+            / sum by (env) (rate(http_requests_total[5m])) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Taxa de erro 5xx acima de 5% ({{ $labels.env }})"
+          description: "Taxa atual: {{ $value | humanizePercentage }}."
+
+      # Latência: p95 acima de 1s.
+      - alert: LatenciaP95Alta
+        expr: |
+          histogram_quantile(0.95, sum by (le, env) (rate(http_request_duration_seconds_bucket[5m]))) > 1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Latência p95 acima de 1s ({{ $labels.env }})"
+          description: "p95 atual: {{ $value | humanizeDuration }}."
+
+      # Saturação: muitas requisições simultâneas para uma VM pequena.
+      - alert: SaturacaoAlta
+        expr: sum by (env) (http_requests_in_progress) > 20
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Muitas requisições simultâneas ({{ $labels.env }})"
+          description: "{{ $value }} requisições em andamento."

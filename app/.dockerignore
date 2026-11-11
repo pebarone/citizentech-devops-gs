@@ -1,0 +1,12 @@
+# Só o necessário entra no contexto de build: nada de testes, segredos ou caches.
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+.venv
+tests
+requirements-dev.txt
+pytest.ini
+.env
+.env.*
+*.pem
+*.key

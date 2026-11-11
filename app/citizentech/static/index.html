@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CitizenTech MVP</title>
+  <style>
+    :root { --bg: #ffffff; --fg: #1a1a1a; --muted: #4a4a4a; --accent: #0b5cad; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #121212; --fg: #f2f2f2; --muted: #c8c8c8; --accent: #7db8ff; }
+    }
+    body { margin: 0; font: 1.125rem/1.6 system-ui, sans-serif; background: var(--bg); color: var(--fg); }
+    main { max-width: 40rem; margin: 0 auto; padding: 2rem 1rem; }
+    h1 { font-size: 1.75rem; line-height: 1.2; }
+    p { color: var(--muted); }
+    a { color: var(--accent); }
+    a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+    code { font-size: 0.95em; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>CitizenTech MVP</h1>
+    <p>
+      Esta é a página inicial do MVP publicada pelo pipeline DevSecOps.
+      Substitua este conteúdo pela tela do cidadão quando o produto estiver definido.
+    </p>
+    <p>Versão em produção: <code id="versao">carregando…</code></p>
+  </main>
+  <script>
+    fetch("/api/v1/info")
+      .then(function (r) { return r.json(); })
+      .then(function (d) { document.getElementById("versao").textContent = d.version + " (" + d.environment + ")"; })
+      .catch(function () { document.getElementById("versao").textContent = "indisponível"; });
+  </script>
+</body>
+</html>

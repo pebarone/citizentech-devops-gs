@@ -1,0 +1,12 @@
+# SITE_ADDRESS em produção é o FQDN da VM (ex.: citizentech-xyz.brazilsouth.cloudapp.azure.com):
+# o Caddy emite o certificado TLS (Let's Encrypt) sozinho e redireciona HTTP para HTTPS.
+{$SITE_ADDRESS}
+
+encode gzip
+
+header {
+	Strict-Transport-Security "max-age=31536000"
+	-Server
+}
+
+reverse_proxy api:8000

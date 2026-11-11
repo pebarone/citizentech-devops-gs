@@ -1,0 +1,12 @@
+# Receptor padrão sem destino externo: o alerta aparece como FIRING no Prometheus (/alerts)
+# e no Alertmanager (http://localhost:9093). Para notificar de verdade, troque por um
+# webhook (Discord/Slack/Teams) usando url_file com o endereço num arquivo ignorado pelo git.
+route:
+  receiver: "padrao"
+  group_by: ["alertname", "env"]
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 1h
+
+receivers:
+  - name: "padrao"
