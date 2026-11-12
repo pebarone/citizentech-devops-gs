@@ -1,12 +1,13 @@
-"""Ponto de entrada da API do MVP.
+"""Ponto de entrada da API do Alerta Córrego.
 
-Esqueleto de produção: saúde, informações, métricas e página estática.
-As rotas de negócio da CitizenTech entram em /api/v1 conforme o produto for definido.
+O Alerta Córrego avisa cedo os moradores de áreas sujeitas a enchentes perto de córregos
+da Zona Leste de São Paulo. Nesta versão do MVP, as leituras dos pontos são simuladas.
 """
 
 import asyncio
 import hmac
 import random
+from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import FastAPI, Header, HTTPException, Response
@@ -15,6 +16,7 @@ from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
 from . import __version__
 from .config import get_settings
+from .corregos import iso_utc, leituras
 from .metrics import PrometheusMiddleware
 
 STATIC_DIR = Path(__file__).parent / "static"
@@ -64,6 +66,22 @@ def info() -> dict:
         "environment": settings.environment,
         "version": settings.version,
     }
+
+
+@app.get("/api/v1/corregos", tags=["mvp"])
+def listar_corregos() -> dict:
+    """Leituras simuladas de todos os pontos monitorados."""
+    agora = datetime.now(timezone.utc)
+    return {"atualizado_em": iso_utc(agora), "fonte": "simulado", "pontos": leituras(agora)}
+
+
+@app.get("/api/v1/corregos/{ponto_id}", tags=["mvp"])
+def ler_corrego(ponto_id: str) -> dict:
+    """Leitura simulada de um ponto monitorado. Responde 404 se o ponto não existir."""
+    for leitura in leituras(datetime.now(timezone.utc)):
+        if leitura["id"] == ponto_id:
+            return leitura
+    raise HTTPException(status_code=404, detail="ponto não encontrado")
 
 
 @app.get("/metrics", include_in_schema=False)

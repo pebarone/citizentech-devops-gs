@@ -1,33 +1,53 @@
-# CitizenTech MVP — Deploy Blindado
+# Alerta Córrego
 
-> Global Solution 2026.2 · FIAP · Engenharia de Software 4º ano
-> Disciplina **Secure DevOps Tools & Cloud Computing** — componente **Produção**
+> Global Solution 2026.2, FIAP, Engenharia de Software 4º ano.
+> Disciplina **Secure DevOps Tools & Cloud Computing**, componente **Produção** (atividade Deploy Blindado).
 
-O MVP da equipe vai para o ar sem clique em botão: container, nuvem descrita em Terraform e um
-pipeline que barra segredo vazado e vulnerabilidade antes de qualquer coisa chegar ao cidadão.
+O Alerta Córrego avisa quem mora na beira de córrego que a água está subindo, antes de ela chegar à porta.
+Este repositório coloca o MVP no ar sem clique em botão: container, nuvem descrita em Terraform e um pipeline
+que barra segredo vazado e vulnerabilidade antes de qualquer coisa chegar ao cidadão.
 
 **URL do MVP:** https://citizentech-afvgwa.chilecentral.cloudapp.azure.com
+
+**Repositório:** https://github.com/pebarone/citizentech-devops-gs
 
 ## Integrantes
 
 | Nome completo | RM |
 |---|---|
-| _preencher_ | _preencher_ |
+| João Pedro de Albuquerque Oliveira | 551579 |
+| Pedro Augusto Carneiro Barone Bomfim | 99781 |
+| Matheus Augusto Santos Rego | 551466 |
 
 ## Ficha Técnica do MVP
 
 | Campo | Resposta |
 |---|---|
-| Nome do produto | _preencher_ |
-| Cidadão e território | _preencher_ |
-| Problema, em uma frase | _preencher_ |
-| Proposta de valor | _preencher_ |
-| Arquitetura: componentes | API FastAPI em container → Caddy (HTTPS) → VM Azure (Chile Central, cota gratuita) criada por Terraform; CI/CD DevSecOps no GitHub Actions; observabilidade Prometheus + Grafana. Ver [docs/arquitetura.md](docs/arquitetura.md). _Completar com os componentes das outras disciplinas._ |
-| Fontes de dados | _preencher (componente Dados)_ |
-| Modelos de IA utilizados | _preencher (componentes Inteligência e Visão)_ |
-| URL do MVP e repositório | https://citizentech-afvgwa.chilecentral.cloudapp.azure.com · https://github.com/pebarone/citizentech-devops-gs |
-| Indicadores de impacto | _preencher_ |
-| ODS conectados | _preencher (obrigatório)_ |
+| Nome do produto | Alerta Córrego |
+| Cidadão e território | Famílias que moram em áreas de alagamento na beira de córregos da Zona Leste de São Paulo: Jardim Pantanal, Jardim Romano, Jardim Helena e Guaianases. Muitas usam celular de entrada e internet instável. |
+| Problema, em uma frase | Quem mora perto do córrego descobre a enchente quando a água já entrou em casa, porque o alerta oficial vale para a cidade inteira e não diz o que acontece naquela rua. |
+| Proposta de valor | Aviso por ponto de córrego, com minutos de antecedência, a partir de sensores baratos instalados na margem, e uma orientação curta do que fazer em cada nível de risco. Chega pela web, por SMS e por WhatsApp, e funciona em celular simples. |
+| Arquitetura: componentes | **Dispositivo:** sensor ultrassônico em ESP32 mede o nível do córrego e envia a leitura. **Dados:** Airflow coleta chuva e nível, Databricks trata em Bronze, Prata e Ouro. **Visão:** câmeras na margem confirmam o nível por imagem. **Inteligência:** LLM local responde dúvidas do morador com base nos protocolos da Defesa Civil. **Automação:** robô RPA dispara SMS e WhatsApp para os moradores cadastrados no ponto em risco. **Produção:** API FastAPI em container, numa VM Azure criada por Terraform, com pipeline DevSecOps no GitHub Actions e observabilidade em Prometheus e Grafana ([arquitetura](docs/arquitetura.md)). **Negócio:** painel para subprefeituras e Defesa Civil. |
+| Fontes de dados | Pluviômetros automáticos do CEMADEN (dados abertos), boletins e alertas do CGE da Prefeitura de São Paulo, estações do INMET, mapa de áreas de risco e hidrografia do GeoSampa e leituras dos sensores próprios. Nesta versão do MVP as leituras dos quatro pontos são simuladas por uma função determinística, documentada em [corregos.py](app/citizentech/corregos.py). |
+| Modelos de IA utilizados | Modelo de regressão (gradient boosting) que prevê o nível do córrego nos próximos 30 minutos a partir da chuva e do nível atual. Modelo de detecção de objetos (YOLO) que lê a régua de nível nas imagens das câmeras. LLM local de pequeno porte, ajustado com QLoRA e consultando uma base com os protocolos da Defesa Civil, para orientar o morador em linguagem simples. |
+| URL do MVP e repositório | https://citizentech-afvgwa.chilecentral.cloudapp.azure.com e https://github.com/pebarone/citizentech-devops-gs |
+| Indicadores de impacto | Antecedência média do alerta antes do transbordo, com meta de 30 minutos. Percentual de moradores cadastrados que recebem o aviso em até 5 minutos. Taxa de alarme falso, com meta abaixo de 10%. Famílias cadastradas por ponto monitorado. Perdas materiais relatadas pelos moradores antes e depois da instalação. |
+| ODS conectados | **ODS 11** (meta 11.5): reduz perdas e mortes causadas por desastres ligados à água, com foco em quem mora em área vulnerável. **ODS 13** (meta 13.1): aumenta a capacidade de adaptação da comunidade a chuvas extremas. **ODS 10** (meta 10.2): leva alerta de qualidade a bairros da periferia, que hoje recebem só o aviso genérico. |
+
+## O MVP no ar
+
+A página inicial mostra os quatro pontos monitorados, com nível da água, chuva na última hora, nível de risco
+(Normal, Atenção, Alerta ou Emergência) e o que o morador deve fazer. Os telefones da Defesa Civil (199) e dos
+Bombeiros (193) ficam sempre visíveis. A página não coleta dado pessoal.
+
+| Rota | O que faz |
+|---|---|
+| `/` | Tela do cidadão |
+| `/api/v1/corregos` | Leituras dos quatro pontos |
+| `/api/v1/corregos/{ponto_id}` | Leitura de um ponto |
+| `/api/v1/info` | Nome, ambiente e versão implantada (SHA do commit) |
+| `/healthz` e `/readyz` | Saúde do processo |
+| `/metrics` | Métricas Prometheus, só com token Bearer |
 
 ## Como este repositório atende a avaliação (14 pontos)
 
@@ -140,7 +160,7 @@ echo -n "<metrics_token>" > observability/secrets/metrics_token
 docker compose -f observability/docker-compose.yml up -d
 ```
 
-O Grafana fica em http://localhost:3000, com o dashboard **CitizenTech - 4 sinais de ouro**. O Prometheus
+O Grafana fica em http://localhost:3000, com o dashboard **Alerta Córrego: 4 sinais de ouro**. O Prometheus
 fica em http://localhost:9090/alerts.
 
 **Para derrubar tudo e parar o custo:** `terraform destroy`.

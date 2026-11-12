@@ -22,7 +22,7 @@ class Settings:
 
 def get_settings() -> Settings:
     return Settings(
-        app_name=os.getenv("APP_NAME", "CitizenTech MVP"),
+        app_name=os.getenv("APP_NAME", "Alerta Córrego"),
         environment=os.getenv("APP_ENV", "local"),
         version=os.getenv("APP_VERSION", "dev"),
         metrics_token=os.getenv("METRICS_TOKEN", ""),

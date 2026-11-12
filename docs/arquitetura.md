@@ -4,7 +4,7 @@
 flowchart LR
     dev[Equipe<br/>git push] --> gh
 
-    subgraph gh[GitHub Actions — DevSecOps]
+    subgraph gh[GitHub Actions: DevSecOps]
         direction TB
         gl[Gitleaks] --> b
         sg[Semgrep] --> b

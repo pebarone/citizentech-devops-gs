@@ -4,8 +4,8 @@ Neste projeto usamos **IaaS**: uma VM. Nesse modelo, a parte que cabe à equipe 
 
 | Camada | Microsoft Azure | Equipe | Como a equipe cumpre |
 |---|:-:|:-:|---|
-| Datacenter, energia e rede física | ✅ | | — |
-| Hipervisor e hardware | ✅ | | — |
+| Datacenter, energia e rede física | ✅ | | Responsabilidade da Microsoft |
+| Hipervisor e hardware | ✅ | | Responsabilidade da Microsoft |
 | Rede virtual e regras de firewall (NSG) | plataforma | ✅ regras | NSG em Terraform: só 80/443 públicos e SSH restrito por `admin_cidrs` |
 | Sistema operacional da VM | imagem base | ✅ patches | `package_upgrade` e `unattended-upgrades` no cloud-init |
 | Runtime de containers (Docker) | | ✅ | Instalado pelo cloud-init. O `unattended-upgrades` só aplica as atualizações de segurança do Ubuntu, então o Docker é atualizado manualmente com `apt-get upgrade` |

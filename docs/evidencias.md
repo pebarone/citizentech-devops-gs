@@ -36,7 +36,7 @@ Por ser falso, o segredo de demonstração não precisa ser revogado. Um segredo
 
 ## Observabilidade (3,0)
 
-- [ ] O dashboard **CitizenTech - 4 sinais de ouro** com dados de produção: latência, tráfego, erros e saturação.
+- [ ] O dashboard **Alerta Córrego: 4 sinais de ouro** com dados de produção: latência, tráfego, erros e saturação.
 - [ ] O Prometheus em `/targets` com `citizentech-prod` UP.
 - [ ] **Alerta disparado.** Escolha uma opção:
   - **MVPForaDoAr:** pare a API na VM com Run Command ou SSH, rodando
